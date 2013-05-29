@@ -18,18 +18,20 @@
 # limitations under the License.
 
 # remove the deprecated Ubuntu jdk packages
-default['java']['remove_deprecated_packages'] = false
+default['java']['remove_deprecated_packages'] = true
 
 # default jdk attributes
 default['java']['install_flavor'] = "openjdk"
 default['java']['jdk_version'] = '7'
 default['java']['arch'] = kernel['machine'] =~ /x86_64/ ? "x86_64" : "i586"
 default['java']['openjdk_packages'] = []
+default['java']['remove_packages'] =  %w[sun-java6-jdk sun-java6-bin sun-java6-jre]
 
 case node['platform_family']
 when "rhel", "fedora"
   default['java']['java_home'] = "/usr/lib/jvm/java"
   default['java']['openjdk_packages'] = ["java-1.#{node['java']['jdk_version']}.0-openjdk", "java-1.#{node['java']['jdk_version']}.0-openjdk-devel"]
+  default['java']['remove_packages'] =  %w[java-1.5.0-gcj java-1.5.0-gcj-devel]
 when "freebsd"
   default['java']['java_home'] = "/usr/local/openjdk#{node['java']['jdk_version']}"
   default['java']['openjdk_packages'] = ["openjdk#{node['java']['jdk_version']}"]
